@@ -2,3 +2,79 @@ curl -X POST -H "Content-Type: application/vnd.schemaregistry.v1+json" \
   --data '{"schema": "{\"type\": \"string\"}"}' \
   http://localhost:8081/subjects/Kafka-key/versions
 https://gist.github.com/aseigneurin/5730c07b4136a84acb5aeec42310312c
+
+
+
+micronaut:
+  security:
+    enabled: true
+    ldap:
+      default:
+        enabled: true
+        context:
+          server: 'ldap://ldap.forumsys.com:389'
+          managerDn: 'cn=read-only-admin,dc=example,dc=com'
+          managerPassword: 'password'
+        search:
+          base: "dc=example,dc=com"
+        groups:
+          enabled: true
+          base: "dc=example,dc=com"
+
+micronaut:
+  security:
+    enabled: true
+    ldap:
+      default:
+        search:
+          base: "OU=UserOU,dc=example,dc=com"
+          attributes:
+            - "cn"
+        groups:
+          enabled: true
+          base: "OU=GroupsOU,dc=example,dc=com"
+          filter: "member={0}"
+
+micronaut:
+  security:
+    enabled: true
+akhq:
+  security:
+    roles:
+      topic-reader:
+        - resources: [ "TOPIC", "TOPIC_DATA" ]
+          actions: [ "READ" ]
+        - resources: [ "TOPIC" ]
+          actions: [ "READ_CONFIG" ]
+      topic-writer:
+        - resources: [ "TOPIC", "TOPIC_DATA" ]
+          actions: [ "CREATE", "UPDATE" ]
+        - resources: [ "TOPIC" ]
+          actions: [ "ALTER_CONFIG" ]
+    groups:
+      topic-reader-pub:
+        - role: topic-reader
+          patterns: [ "pub.*" ]
+      topic-writer-clusterA-projectA:
+        - role: topic-reader
+          patterns: [ "projectA.*" ]
+        - role: topic-writer
+          patterns: [ "projectA.*" ]
+          clusters: [ "clusterA.*" ]
+      acl-reader-clusterA:
+        - role: acl-reader
+          clusters: [ "clusterA.*" ]
+    ldap:
+      groups:
+        - name: mathematicians
+          groups:
+            - topic-reader-pub
+        - name: scientists
+          groups:
+            - topic-writer-clusterA-projectA
+            - acl-reader-clusterA
+      users:
+        - username: franz
+          groups:
+            - topic-writer-clusterA-projectA
+            - acl-reader-clusterA
