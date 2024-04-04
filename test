@@ -78,3 +78,10 @@ akhq:
           groups:
             - topic-writer-clusterA-projectA
             - acl-reader-clusterA
+
+
+
+
+curl -i -X POST -H "Content-Type: application/json" \
+       -d '{ "configuredLevel": "TRACE" }' \
+       http://localhost:28081/loggers/io.micronaut.security
