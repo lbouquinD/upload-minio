@@ -62,3 +62,15 @@ openssl pkcs12 -export -in ./certs/server.crt -inkey ./certs/server.key -out ./c
 
 echo "**Fichier PKCS12 généré:**"
 echo "- ./certs/server.pfx"
+
+
+# Importer le certificat PKCS12 dans le keystore Jira
+keytool -importkeystore -srckeystore ./certs/server.pfx -srcstoretype PKCS12 -destkeystore ./certs/jira.jks -deststoretype JKS -alias jira
+
+# Importer le certificat CA dans le truststore
+keytool -import -trustcacerts -alias ca -file ./certs/ca.crt -keystore ./certs/trust.jks
+
+echo "**Certificats importés avec succès!**"
+echo "**Fichiers:**"
+echo "- ./certs/jira.jks"
+echo "- ./certs/trust.jks"
