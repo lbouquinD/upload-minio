@@ -1,0 +1,5 @@
+CREATE TABLE `nom_de_la_table` (
+  `id` INT PRIMARY KEY AUTO_INCREMENT,
+  `date_insertion` DATETIME DEFAULT CURRENT_TIMESTAMP,
+  `chaine_caractere` VARCHAR(255) NOT NULL
+);
