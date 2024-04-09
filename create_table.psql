@@ -3,3 +3,17 @@
   date_insertion timestamp  DEFAULT CURRENT_TIMESTAMP,
   chaine_caractere VARCHAR(255) NOT NULL
 );
+
+
+\c test
+insert into test(chaine_caractere)  values ('un test');
+
+
+#!/bin/bash
+
+
+
+psql "port=5434 host=/data/appli/patroni/data user=root dbname=postgres" -f /var/lib/pgsql/insert.sql
+
+
+* * * * * postgres  /var/lib/pgsql/run_insert.sh
