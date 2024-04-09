@@ -29,3 +29,9 @@ method: pgbackrest
           recovery_target: immediate
           recovery_target_action: pause
           restore_command: pgbackrest --stanza=main archive-get %f %p
+
+
+#!/bin/sh
+
+mkdir -p /home/postgres/data
+pgbackrest --stanza=main  --log-level-console=info --delta --type=time "--target=2020-07-02 19:20:54.320877+01" --target-action=promote restore
