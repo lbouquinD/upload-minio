@@ -17,3 +17,15 @@ psql "port=5434 host=/data/appli/patroni/data user=root dbname=postgres" -f /var
 
 
 * * * * * postgres  /var/lib/pgsql/run_insert.sh
+
+
+
+method: pgbackrest
+  pgbackrest:
+      command: /home/postgres/custom_bootstrap.sh
+      keep_existing_recovery_conf: False
+      no_params: False
+      recovery_conf:
+          recovery_target: immediate
+          recovery_target_action: pause
+          restore_command: pgbackrest --stanza=main archive-get %f %p
