@@ -1,0 +1,25 @@
+create user
+
+# Check if group exists
+if getent group nom_du_groupe >/dev/null 2>&1; then
+  echo "Le groupe '${nom_du_groupe}' existe déjà."
+else
+  # Create group if it doesn't exist
+  sudo groupadd nom_du_groupe
+  echo "Groupe '${nom_du_groupe}' créé avec succès."
+fi
+
+# Check if user exists
+if id nom_utilisateur >/dev/null 2>&1; then
+  echo "L'utilisateur '${nom_utilisateur}' existe déjà."
+else
+  # Create user if it doesn't exist
+  sudo useradd -m nom_utilisateur
+  echo "Utilisateur '${nom_utilisateur}' créé avec succès."
+fi
+
+# Add user to group (assuming user exists now)
+sudo usermod -aG nom_du_groupe nom_utilisateur
+
+# Display user groups
+groups nom_utilisateur
